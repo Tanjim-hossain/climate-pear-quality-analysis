@@ -1,6 +1,6 @@
 ---
 title: "Pear quality and longitudinal growth: complete exploratory analysis"
-author: "David Andryan"
+author: "Tanjim Hossain"
 date: "2026-04-13"
 output:
   html_document:
@@ -9,7 +9,7 @@ output:
     code_folding: show
 ---
 
-The original exploratory workflow by David Andryan is retained below in full.
+This portfolio exploratory workflow is retained below in full.
 Paths and selected display labels have been adapted for this repository.
 The field `quality` in the size dataset means **pear size in cm**, not the harvest quality index.
 Exploratory error bars describe the observations; they are not cluster-adjusted model confidence intervals.

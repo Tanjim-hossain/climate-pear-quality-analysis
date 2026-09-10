@@ -2,13 +2,15 @@
 
 **Mixed Models, Longitudinal Growth, and Multivariate Soil Analysis in R and SAS**
 
+**Author: Tanjim Hossain**
+
 How might future climate interventions affect the quality and growth of pears? This project investigates four simulated 2070 climate scenarios using pear quality, repeated size measurements and soil characteristics from an Ecotron teaching study.
 
-The analysis follows the entire statistical workflow: understanding the experimental design, inspecting the data, defining outcomes, accounting for clustered observations, comparing models, examining dropout, and interpreting PCA and LDA. All supplied analysis code and the complete report are included.
+The analysis follows the entire statistical workflow: understanding the experimental design, inspecting the data, defining outcomes, accounting for clustered observations, comparing models, examining dropout, and interpreting PCA and LDA. The public portfolio includes the complete analysis code, datasets, reproducibility checks, figures and a step-by-step technical guide.
 
-**Main finding from the submitted analysis:** Scenario 2, representing active CO₂ removal, showed the most consistent positive associations with pear quality and growth. The growth comparison describes four experimental units, with one ecotron per scenario; it cannot isolate climate effects from ecotron effects.
+**Main finding from the project analysis:** Scenario 2, representing active CO₂ removal, showed the most consistent positive associations with pear quality and growth. The growth comparison describes four experimental units, with one ecotron per scenario; it cannot isolate climate effects from ecotron effects.
 
-[Full report](reports/final-report.pdf) · [Step-by-step analysis](docs/analysis-guide.md) · [Data dictionary](data/README.md) · [Reproducibility and corrections](docs/analysis-audit.md)
+[Step-by-step analysis](docs/analysis-guide.md) · [Data dictionary](data/README.md) · [Reproducibility and corrections](docs/analysis-audit.md)
 
 ![Harvest quality by climate and location](figures/quality-distribution.png)
 
@@ -25,11 +27,11 @@ The analysis follows the entire statistical workflow: understanding the experime
 | What structure is present in the soil measurements? | 17 standardized soil variables | PCA, scree plot and biplot |
 | Can soil characteristics and pear counts distinguish the climate groups? | Soil features plus pears per tree | LDA, discriminant scores and coefficients |
 
-The original sample-size planning discussion and reported power calculations are preserved in the full report. The project-specific simulation script was not present in the supplied sources; its numerical results are documented as reported, not reconstructed as an original program.
+The sample-size planning discussion and reported power calculations are documented in the [analysis guide](docs/analysis-guide.md). The project-specific simulation script was not present in the supplied sources; its numerical results are documented as reported, not reconstructed as an original program.
 
 ## Study context
 
-The project was completed for **Multivariate and Hierarchical Data / Project Discovering Associations, Hasselt University, 2025–2026, Group 12**.
+The project was completed for **Multivariate and Hierarchical Data / Project Discovering Associations, Hasselt University, 2025–2026**.
 
 Ecotrons are controlled environmental units. The assignment considers two pear varieties, **Conference** and **Doyenne du Comice**, under four future scenarios:
 
@@ -67,15 +69,15 @@ Inspect variable types, identifiers, location, species and climate allocations. 
 
 ### 2. Explore continuous and binary quality
 
-The complete EDA includes distributions by climate, variety and location; subgroup means; interaction plots; the index ≥55 classification; tree-level proportions; and subgroup comparisons. All original R chunks remain available in the [annotated EDA notebook](analysis/r/01-exploratory-analysis.Rmd), alongside its [original rendered PDF](reports/exploratory-analysis.pdf).
+The complete EDA includes distributions by climate, variety and location; subgroup means; interaction plots; the index ≥55 classification; tree-level proportions; and subgroup comparisons. The full editable workflow is available in the [annotated EDA notebook](analysis/r/01-exploratory-analysis.Rmd).
 
 ### 3. Model harvest quality with clustering
 
-The report's primary continuous model uses climate, variety and location as fixed effects and a tree random intercept. Its logistic counterpart models good-quality odds. GEE comparisons use population-average models with alternative working correlations. The original SAS source also fits tree and ecotron random intercepts; the distinction is documented rather than silently combined into a single model.
+The project's primary continuous model uses climate, variety and location as fixed effects and a tree random intercept. Its logistic counterpart models good-quality odds. GEE comparisons use population-average models with alternative working correlations. The supplied SAS source also fits tree and ecotron random intercepts; the distinction is documented rather than silently combined into a single model.
 
 ### 4. Analyse repeated growth and dropout
 
-Reshape weeks 5–24 into long format. Inspect retention, last observed weeks, descriptive survival curves, mean growth and individual trajectories. The report's longitudinal model includes time-by-climate and time-by-variety terms, a tree random intercept and a correlated pear intercept/slope. Compare all-available and complete-case analyses.
+Reshape weeks 5–24 into long format. Inspect retention, last observed weeks, descriptive survival curves, mean growth and individual trajectories. The longitudinal model includes time-by-climate and time-by-variety terms, a tree random intercept and a correlated pear intercept/slope. Compare all-available and complete-case analyses.
 
 ![Observed pear growth](figures/growth-trajectories.png)
 
@@ -87,15 +89,15 @@ Standardize the 17 soil measurements before PCA. Examine explained variance, obs
 
 ![Soil PCA](figures/soil-pca.png)
 
-*PCA calculated from all 96 soil records. The complete original biplot and every LDA plot are in [soil-analysis.pdf](reports/soil-analysis.pdf); the editable code is in [02-soil-analysis.R](analysis/r/02-soil-analysis.R).*
+*PCA calculated from all 96 soil records. The complete PCA/LDA output is in [soil-analysis.pdf](reports/soil-analysis.pdf); the editable code is in [02-soil-analysis.R](analysis/r/02-soil-analysis.R).*
 
 ### 6. Interpret results and limitations
 
 Separate continuous-quality differences, odds ratios and weekly growth-rate differences. Use the correct reference group, account for multiple comparisons, and distinguish exploratory discrimination from validated prediction. The [analysis guide](docs/analysis-guide.md) explains each step and links it to its source.
 
-## Results reported in the submitted analysis
+## Results from the project analysis
 
-The table below transcribes selected estimates from the submitted report. It is a reading guide; the full model tables, comparisons, covariance estimates and appendices remain in [the report](reports/final-report.pdf). R/SAS model estimates were **not re-fitted** during repository preparation.
+The table below summarizes selected estimates from the project analysis. The detailed model tables, assumptions, discrepancies and interpretation are documented in the [analysis guide](docs/analysis-guide.md) and [audit](docs/analysis-audit.md). R/SAS model estimates were **not re-fitted** during repository preparation.
 
 | Endpoint | Comparison | Reported estimate | Interpretation |
 |---|---|---:|---|
@@ -111,7 +113,7 @@ The table below transcribes selected estimates from the submitted report. It is 
 
 Independent calculations from the supplied raw data reproduce the rounded PCA and LDA proportions. Seven PCs explain **79.80%**, while eight explain **84.20%**: eight are needed if the target is strictly at least 80%.
 
-The binary-model intercept is 0.3028 on the log-odds scale: `exp(0.3028) ≈ 1.3536` odds, corresponding to a **57.51% conditional probability at random effect zero**. The original report's “35.36” wording is not the corresponding probability. Other source discrepancies and their implications are explained in the [audit](docs/analysis-audit.md).
+The binary-model intercept is 0.3028 on the log-odds scale: `exp(0.3028) ≈ 1.3536` odds, corresponding to a **57.51% conditional probability at random effect zero**. A previously reported “35.36” interpretation is not the corresponding probability. Other source discrepancies and their implications are explained in the [audit](docs/analysis-audit.md).
 
 ## Repository navigation
 
@@ -119,10 +121,10 @@ The binary-model intercept is 0.3028 on the log-odds scale: `exp(0.3028) ≈ 1.3
 |---|---|
 | [analysis/r](analysis/r) | Complete annotated EDA R Markdown and recovered PCA/LDA R source |
 | [analysis/sas](analysis/sas) | Complete supplied SAS workflow with portable paths; separate report-aligned implementation |
-| [archive/original-code](archive/original-code) | Byte-preserved Rmd and SAS originals, plus code extracted from the soil PDF |
+| [archive/original-code](archive/original-code) | Source-format Rmd and SAS copies, plus code extracted from the soil PDF |
 | [data](data) | Three raw datasets, all three supplied exports and the data dictionary |
-| [reports](reports) | Full report, rendered EDA, soil analysis and SAS code PDF |
-| [docs](docs) | Study brief, soil definitions, analysis guide, audit and attribution |
+| [reports](reports) | PCA/LDA output and the SAS source PDF retained for technical reference |
+| [docs](docs) | Study brief, soil definitions, analysis guide, audit and project provenance |
 | [results](results) | Data-validation output, full PCA/LDA tables, subgroup and retention tables |
 | [figures](figures) | Reproducible README figures |
 | [notebooks](notebooks) | Full editable Python data-validation companion |
@@ -156,7 +158,7 @@ Rscript scripts/prepare_data.R
 Rscript analysis/r/02-soil-analysis.R
 ```
 
-### SAS: original workflow and report-aligned models
+### SAS: source workflow and report-aligned models
 
 After data preparation, use an installation with SAS/STAT:
 
@@ -183,10 +185,10 @@ The [validation record](results/validation.json) records 24 passing checks and t
 - **Climate replication:** harvest climate is assigned at ecotron level. The source's tree-only models need comparison with ecotron-aware inference. Longitudinal data have one ecotron per climate, so climate and ecotron are inseparable.
 - **Missingness:** keeping incomplete pears in a likelihood analysis relies on an appropriate model and an ignorable missing-data mechanism, commonly MAR. Likelihood does not automatically eliminate dropout bias.
 - **LDA:** separation was fitted on the same observations used for display. No held-out predictive performance is claimed. A small pear-count coefficient is not a test that climate has no effect on yield.
-- **Source versions:** the report and supplied code differ in several model specifications. Both are preserved, and adaptations are recorded in [analysis-audit.md](docs/analysis-audit.md).
+- **Source versions:** the historical report and supplied code differ in several model specifications. Those differences and the portfolio adaptations are recorded in [analysis-audit.md](docs/analysis-audit.md).
 
-## Contributors and provenance
+## Author and project provenance
 
-Original group contributors: **Luu Trong Nghia, Brohi Abdullah Ali, Hossain Tanjim, Andryan David, and Tahri Mohammed**. The EDA source identifies **David Andryan** as its author. This portfolio repository is maintained by **Tanjim Hossain**; it presents the collaborative project and does not assert sole authorship of the group work.
+**Portfolio author and maintainer: Tanjim Hossain**
 
-Data and project materials were supplied for the UHasselt course. No independent open-data licence was included in the source materials. The repository does not grant a new blanket licence over course data or collaborator-authored materials. See [provenance](docs/provenance.md).
+Data and course materials were supplied for the UHasselt project. No independent open-data licence was included in the source materials. This repository does not grant a new blanket licence over the course datasets. See [provenance](docs/provenance.md).

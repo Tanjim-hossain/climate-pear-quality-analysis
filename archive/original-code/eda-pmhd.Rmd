@@ -1,6 +1,6 @@
 ---
 title: "Explanatory PMHD"
-author: "David Andryan"
+author: "Tanjim Hossain"
 date: "2026-04-13"
 output: pdf_document
 ---
