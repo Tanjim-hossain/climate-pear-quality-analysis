@@ -1,0 +1,67 @@
+[
+  {
+    "path": "data/raw/G12.outcome.data.csv",
+    "sha256": "5d33df66a8e1576a4747d095de0f66d631a10ba39ebfa01ef1bc27bcaa4bcde9",
+    "bytes": 112697
+  },
+  {
+    "path": "data/raw/G12.size.data.csv",
+    "sha256": "a84c13d0eae4fe10051793fa03f955999e18cf255eb246ab9960ff11b9cce9a7",
+    "bytes": 68607
+  },
+  {
+    "path": "data/raw/G12.soil.data.csv",
+    "sha256": "6079b9670b8a810a6757e92d2ff7a24e92709d5b23f555807b6370af407655b0",
+    "bytes": 13928
+  },
+  {
+    "path": "data/processed/longitudinal_data.csv",
+    "sha256": "d45bd6b94300a1e3b5e98c29a7881ad78311746a7deed1b2fc8d3b59ed1ede21",
+    "bytes": 199430
+  },
+  {
+    "path": "data/processed/quality_binary.csv",
+    "sha256": "f67d7402b1753f6763c56e9f5e2c46e37716c1b7903893840c2bf7e6ac8b319f",
+    "bytes": 116593
+  },
+  {
+    "path": "data/processed/time_data_clean.csv",
+    "sha256": "b7ef38bcd34aaf21b503c9dbf5688f038d0d0e662034183fc7411128701a3b99",
+    "bytes": 182471
+  },
+  {
+    "path": "archive/original-code/eda-pmhd.Rmd",
+    "sha256": "c531d46d983256305b1c7db957b672d6222d706d8c695994a9fa162b8d92a370",
+    "bytes": 15111
+  },
+  {
+    "path": "archive/original-code/pmhd.sas",
+    "sha256": "30e6629b7fc26492119c2ba15442f1ef0afac502635083ffa6b3fca43d9c8393",
+    "bytes": 5732
+  },
+  {
+    "path": "archive/original-code/soil-analysis-extracted.R",
+    "sha256": "7feeecce251c540a6193cee2a04887c6fdf378f8c9ba6bb8a74360f9f134ad35",
+    "bytes": 2524
+  },
+  {
+    "path": "reports/exploratory-analysis.pdf",
+    "sha256": "90bfc10e0e6684a9977bf3fa2dada3db0a3501c19b1c7e7c2996f784c57f75ac",
+    "bytes": 487266
+  },
+  {
+    "path": "reports/final-report.pdf",
+    "sha256": "778198dc578a43ced6deeeeb4da877549a6ec8525922643cf01e24ecd72f24fd",
+    "bytes": 850364
+  },
+  {
+    "path": "reports/longitudinal-sas-source.pdf",
+    "sha256": "a7fdbadf5393e7d3f8bd58365625af7810c6938edd4ce742ae61f5bc63dff5f3",
+    "bytes": 229857
+  },
+  {
+    "path": "reports/soil-analysis.pdf",
+    "sha256": "ee04dd2f41e4ec8736273aedeedeee9a9a5335012389d4b6afea6c4caf326351",
+    "bytes": 255991
+  }
+]

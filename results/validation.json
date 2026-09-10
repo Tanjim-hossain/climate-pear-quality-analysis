@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "harvest_id_unique": true,
+    "size_pear_id_unique": true,
+    "soil_tree_id_unique": true,
+    "harvest_quality_range": true,
+    "harvest_complete": true,
+    "soil_complete": true,
+    "harvest_climate_levels": true,
+    "harvest_species_levels": true,
+    "size_climate_levels": true,
+    "size_species_levels": true,
+    "soil_climate_levels": true,
+    "soil_species_levels": true,
+    "binary_threshold_55": true,
+    "longitudinal_matches_raw_reshape": true,
+    "complete_case_export_matches_raw": true,
+    "dropout_monotone": true,
+    "long_unique_pear_week": true,
+    "one_climate_per_harvest_ecotron": true,
+    "one_climate_per_growth_ecotron": true,
+    "soil_harvest_full_join_coverage": true,
+    "pca_17_features": true,
+    "pca_trace_17": true,
+    "pca_first_components_match_report_rounding": true,
+    "lda_ratios_match_report_rounding": true
+  },
+  "harvest_rows": 1942,
+  "harvest_ecotrons": 16,
+  "harvest_trees": 96,
+  "harvest_mean_quality": 56.09732234809475,
+  "growth_pears": 192,
+  "scheduled_measurements": 3840,
+  "observed_measurements": 3637,
+  "missing_measurements": 203,
+  "complete_pears": 173,
+  "week24_by_species": {
+    "Conference": 94,
+    "Doyenne": 79
+  },
+  "pca_first7_fraction": 0.7979595979901837,
+  "pca_first8_fraction": 0.8419631687555679,
+  "r_models_executed": false,
+  "sas_models_executed": false,
+  "python_version": "3.12.14",
+  "packages": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "matplotlib": "3.10.8",
+    "scipy": "1.17.0",
+    "scikit-learn": "1.8.0"
+  }
+}
