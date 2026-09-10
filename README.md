@@ -1,6 +1,6 @@
 # Pear Quality Under Future Climate Scenarios
 
-**Mixed Models, Longitudinal Growth, and Multivariate Soil Analysis in R and SAS**
+**Mixed Models, Longitudinal Growth, and Multivariate Soil Analysis in R, SAS and Python**
 
 **Author: Tanjim Hossain**
 
@@ -15,6 +15,26 @@ The analysis follows the entire statistical workflow: understanding the experime
 ![Harvest quality by climate and location](figures/quality-distribution.png)
 
 *Observed harvest quality; boxplots describe the data rather than adjusted model effects. Source: the complete harvest dataset included below.*
+
+## Results from the project analysis
+
+The table below summarizes selected estimates from the project analysis. The detailed model tables, assumptions, discrepancies and interpretation are documented in the [analysis guide](docs/analysis-guide.md) and [audit](docs/analysis-audit.md). R/SAS model estimates were **not re-fitted** during repository preparation.
+
+| Endpoint | Comparison | Reported estimate | Interpretation |
+|---|---|---:|---|
+| Continuous quality | Scenario 2 vs 1 | +9.9964 index units | Higher adjusted mean quality |
+| Continuous quality | Scenario 3 vs 1 | +5.5843 index units | Higher adjusted mean quality |
+| Continuous quality | Doyenne vs Conference | −6.3519 index units | Lower adjusted mean quality |
+| Good-quality odds | Scenario 2 vs 1 | OR ≈1.6835 | About 68% higher odds; not 68 percentage points higher probability |
+| Good-quality odds | Doyenne vs Conference | OR ≈0.6130 | About 39% lower odds |
+| Growth rate | Scenario 2 vs 1 | +0.0515 cm/week | Faster estimated growth in the observed units |
+| Growth rate | Doyenne vs Conference | −0.0532 cm/week | Slower estimated growth |
+| Soil PCA | PC1 / PC2 / PC3 | 19.5% / 14.7% / 14.5% | Variability spans several dimensions |
+| Soil LDA | LD1 / LD2 / LD3 | 59.8% / 23.0% / 17.1% | Relative discriminant strength; not prediction accuracy |
+
+Independent calculations from the supplied raw data reproduce the rounded PCA and LDA proportions. Seven PCs explain **79.80%**, while eight explain **84.20%**: eight are needed if the target is strictly at least 80%.
+
+The binary-model intercept is 0.3028 on the log-odds scale: `exp(0.3028) ≈ 1.3536` odds, corresponding to a **57.51% conditional probability at random effect zero**. A previously reported “35.36” interpretation is not the corresponding probability. Other source discrepancies and their implications are explained in the [audit](docs/analysis-audit.md).
 
 ## Research questions
 
@@ -94,26 +114,6 @@ Standardize the 17 soil measurements before PCA. Examine explained variance, obs
 ### 6. Interpret results and limitations
 
 Separate continuous-quality differences, odds ratios and weekly growth-rate differences. Use the correct reference group, account for multiple comparisons, and distinguish exploratory discrimination from validated prediction. The [analysis guide](docs/analysis-guide.md) explains each step and links it to its source.
-
-## Results from the project analysis
-
-The table below summarizes selected estimates from the project analysis. The detailed model tables, assumptions, discrepancies and interpretation are documented in the [analysis guide](docs/analysis-guide.md) and [audit](docs/analysis-audit.md). R/SAS model estimates were **not re-fitted** during repository preparation.
-
-| Endpoint | Comparison | Reported estimate | Interpretation |
-|---|---|---:|---|
-| Continuous quality | Scenario 2 vs 1 | +9.9964 index units | Higher adjusted mean quality |
-| Continuous quality | Scenario 3 vs 1 | +5.5843 index units | Higher adjusted mean quality |
-| Continuous quality | Doyenne vs Conference | −6.3519 index units | Lower adjusted mean quality |
-| Good-quality odds | Scenario 2 vs 1 | OR ≈1.6835 | About 68% higher odds; not 68 percentage points higher probability |
-| Good-quality odds | Doyenne vs Conference | OR ≈0.6130 | About 39% lower odds |
-| Growth rate | Scenario 2 vs 1 | +0.0515 cm/week | Faster estimated growth in the observed units |
-| Growth rate | Doyenne vs Conference | −0.0532 cm/week | Slower estimated growth |
-| Soil PCA | PC1 / PC2 / PC3 | 19.5% / 14.7% / 14.5% | Variability spans several dimensions |
-| Soil LDA | LD1 / LD2 / LD3 | 59.8% / 23.0% / 17.1% | Relative discriminant strength; not prediction accuracy |
-
-Independent calculations from the supplied raw data reproduce the rounded PCA and LDA proportions. Seven PCs explain **79.80%**, while eight explain **84.20%**: eight are needed if the target is strictly at least 80%.
-
-The binary-model intercept is 0.3028 on the log-odds scale: `exp(0.3028) ≈ 1.3536` odds, corresponding to a **57.51% conditional probability at random effect zero**. A previously reported “35.36” interpretation is not the corresponding probability. Other source discrepancies and their implications are explained in the [audit](docs/analysis-audit.md).
 
 ## Repository navigation
 
