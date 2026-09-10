@@ -1,0 +1,481 @@
+---
+title: "Explanatory PMHD"
+author: "David Andryan"
+date: "2026-04-13"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(lattice)
+library(viridis)
+```
+
+
+```{r}
+main.data <- read.csv("D:/UHasselt/2nd semester/PMHD/project/G12.outcome.data.csv",
+                      sep = ",")
+str(main.data)
+
+sapply(main.data, function(x) sum(is.na(x)))
+```
+
+```{r}
+ggplot(main.data, aes(climate, quality_idx, colour = location))+
+  geom_boxplot()+
+  stat_summary(fun = mean, geom = "point",
+               position = position_dodge(width = 0.75)) +
+  labs(y="quality index")+
+  theme_bw()
+
+ggplot(main.data, aes(species, quality_idx, colour = location))+
+  geom_boxplot()+
+  stat_summary(fun = mean, geom = "point",
+               position = position_dodge(width = 0.75)) +
+  labs(y="quality index")+
+  theme_bw()
+
+ggplot(main.data, aes(location, quality_idx))+
+  geom_boxplot()+
+  stat_summary(fun = mean, geom = "point",
+               position = position_dodge(width = 0.75)) +
+  labs(y="quality index")+
+  theme_bw()
+
+ggplot(main.data, aes(climate, quality_idx, colour = species))+
+  geom_boxplot()+
+  stat_summary(fun = mean, geom = "point",
+               position = position_dodge(width = 0.75)) +
+  labs(y="quality index")+
+  theme_bw()
+
+mean_data <- main.data %>% 
+  group_by(location) %>% 
+  summarise(mean_quality = mean(quality_idx))
+
+ggplot(main.data, aes(climate, quality_idx, colour = species)) +
+  geom_boxplot() +
+  stat_summary(fun = mean, geom = "point",
+               position = position_dodge(width = 0.75))+
+  geom_hline(data = mean_data,
+             aes(yintercept = mean_quality),
+             linetype = "dashed",
+             color = "black") +
+  facet_wrap(~location) +
+  theme_bw()
+```
+
+```{r}
+interaction.plot(x.factor = main.data$species, 
+                 trace.factor = main.data$climate, 
+                 response = main.data$quality_idx,
+                 trace.label = "climate",
+                 type = "b",
+                 xlab = "species", 
+                 ylab = "quality index",
+                 ylim = c(45, 65))
+
+interaction.plot(x.factor = main.data$species, 
+                 trace.factor = main.data$location, 
+                 response = main.data$quality_idx,
+                 trace.label = "location",
+                 type = "b",
+                 xlab = "species", 
+                 ylab = "quality index",
+                 ylim = c(45, 65))
+
+interaction.plot(x.factor = main.data$location, 
+                 trace.factor = main.data$climate, 
+                 response = main.data$quality_idx,
+                 trace.label = "climate",
+                 type = "b",
+                 xlab = "location", 
+                 ylab = "quality index",
+                 ylim = c(45, 65))
+
+ggplot(main.data, aes(x = climate, y = quality_idx, color = species, group = species)) +
+  stat_summary(fun = mean, geom = "line") +
+  stat_summary(fun = mean, geom = "point") +
+  facet_grid(~location) + 
+  theme_minimal() +
+  labs(y = "Avg Quality Index")
+```
+
+```{r}
+main.data2 <- main.data %>% 
+  mutate(quality_b = if_else(quality_idx >= 55,1,0))
+
+# write.csv(main.data2,"D:/UHasselt/2nd semester/PMHD/project/quality_binary.csv",
+#           row.names = FALSE)
+```
+
+```{r}
+main.data2 %>%
+  group_by(location, tree_id, species, climate) %>%
+  summarise(prob_success = mean(quality_b), .groups = "drop") %>% 
+  ggplot(aes(location, prob_success, fill = species))+
+  geom_boxplot()+
+  stat_summary(fun = mean, geom = "point",
+               position = position_dodge(width = 0.75))+
+  facet_wrap(~climate)+
+  labs(y = "probability of success") +
+  theme_bw()
+
+main.data2 %>%
+  count(location, species, climate, quality_b) %>%
+  group_by(location, species, climate) %>%
+  mutate(percent = n / sum(n)) %>% 
+  ggplot(aes(climate, percent, fill = as.factor(quality_b))) +
+  geom_bar(stat = "identity",position = "dodge") +
+  facet_wrap(~location) +
+  scale_fill_manual(values = c("gray70", "skyblue"), labels = c("Bad", "Good")) +
+  labs(y = "proportion of quality", fill = "Outcome") +
+  theme_minimal()
+
+main.data2 %>%
+  count(location, species, climate, quality_b) %>%
+  group_by(location, species, climate) %>%
+  mutate(percent = n / sum(n)) %>% 
+  ggplot(aes(climate, percent, fill = as.factor(quality_b))) +
+  geom_bar(stat = "identity",position = "dodge") +
+  facet_wrap(~species) +
+  scale_fill_manual(values = c("gray70", "skyblue"), labels = c("Bad", "Good")) +
+  labs(y = "proportion of quality", fill = "Outcome") +
+  theme_minimal()
+
+main.data2 %>%
+  count(location, species, climate, quality_b) %>%
+  group_by(location, species, climate) %>%
+  mutate(percent = n / sum(n)) %>% 
+  ggplot(aes(climate, percent, fill = as.factor(quality_b))) +
+  geom_bar(stat = "identity",position = "dodge") +
+  facet_grid(location~species) +
+  scale_fill_manual(values = c("gray70", "skyblue"), labels = c("Bad", "Good")) +
+  labs(y = "proportion of quality", fill = "Outcome") +
+  theme_minimal()
+```
+
+```{r}
+main.data2 %>%
+  group_by(location, tree_id, species, climate) %>%
+  summarise(prob_success = mean(quality_b), .groups = "drop") %>% 
+  ggplot(aes(climate, prob_success, fill = location)) +
+  geom_boxplot() + 
+  stat_summary(fun = mean, geom = "point",
+               position = position_dodge(width = 0.75)) +
+  labs(y="probability of success") +
+  theme_bw()
+
+main.data2 %>%
+  group_by(location, tree_id, species, climate) %>%
+  summarise(prob_success = mean(quality_b), .groups = "drop") %>% 
+  ggplot(aes(climate, prob_success, fill = species)) +
+  geom_boxplot() + 
+  stat_summary(fun = mean, geom = "point",
+               position = position_dodge(width = 0.75)) +
+  labs(y="probability of success") +
+  theme_bw()
+
+main.data2 %>%
+  group_by(location, tree_id, species, climate) %>%
+  summarise(prob_success = mean(quality_b), .groups = "drop") %>% 
+  ggplot(aes(species, prob_success, fill = location)) +
+  geom_boxplot() + 
+  stat_summary(fun = mean, geom = "point",
+               position = position_dodge(width = 0.75)) +
+  labs(y="probability of success") +
+  theme_bw()
+
+main.data2 %>%
+  group_by(location, tree_id, species, climate) %>%
+  summarise(prob_success = mean(quality_b), .groups = "drop") %>% 
+  ggplot(aes(climate, prob_success, fill = species)) +
+  geom_boxplot() + 
+  stat_summary(fun = mean, geom = "point",
+               position = position_dodge(width = 0.75)) +
+  facet_wrap(~location) +
+  labs(y="probability of success") +
+  theme_bw()
+
+main.data2 %>%
+  group_by(location, tree_id, species, climate) %>%
+  summarise(prob_success = mean(quality_b), .groups = "drop") %>% 
+  ggplot(aes(x = location, y = prob_success, fill = species)) +
+  geom_boxplot(position = position_dodge(width = 0.8)) + 
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black",
+               position = position_dodge(width = 0.8)) +
+  facet_grid(species ~ climate) +
+  labs(y = "probability of success") +
+  theme_bw()
+```
+
+```{r}
+interaction.plot(x.factor = main.data2$species, 
+                 trace.factor = main.data2$climate, 
+                 response = main.data2$quality_b,
+                 trace.label = "climate",
+                 type = "b",
+                 xlab = "species", 
+                 ylab = "probability of success",
+                 ylim = c(0.30, 0.7))
+
+interaction.plot(x.factor = main.data2$species, 
+                 trace.factor = main.data2$location, 
+                 response = main.data2$quality_b,
+                 trace.label = "location",
+                 type = "b",
+                 xlab = "species", 
+                 ylab = "probability of success",
+                 ylim = c(0.30, 0.7))
+
+interaction.plot(x.factor = main.data2$location, 
+                 trace.factor = main.data2$climate, 
+                 response = main.data2$quality_b,
+                 trace.label = "climate",
+                 type = "b",
+                 xlab = "location", 
+                 ylab = "probability of success",
+                 ylim = c(0.30, 0.7))
+
+```
+
+
+
+```{r}
+time.data <- read.csv("D:/UHasselt/2nd semester/PMHD/project/G12.size.data.csv",
+                      sep = ",")
+str(time.data)
+
+sapply(time.data, function(x) sum(is.na(x)))
+time.data[!complete.cases(time.data), ]
+library(naniar)
+miss_var_summary(time.data)
+```
+
+there are some drop out data, not missing. Some observations were obtained but dropout after a certain points.
+
+
+
+```{r}
+time.data2 <- reshape(time.data, direction = "long", 
+                     varying = c("week_5","week_6","week_7","week_8","week_9",
+                                 "week_10","week_11","week_12","week_13","week_14",
+                                 "week_15","week_16","week_17","week_18","week_19",
+                                 "week_20","week_21","week_22","week_23","week_24"),
+                     idvar = c("pear_id","tree_id","ecotr_id","species","climate"),
+                     timevar = "time", times = 5:24, v.names = "quality")
+str(time.data2)
+# write.csv(time.data2,"D:/UHasselt/2nd semester/PMHD/project/longitudinal_data.csv",
+#           row.names = FALSE)
+```
+
+```{r}
+time.data2 %>%
+  group_by(species) %>%
+  summarise(Total_NA = sum(is.na(quality)))
+
+dropout_patterns <- time.data2 %>%
+  filter(!is.na(quality)) %>%
+  group_by(pear_id, species, climate) %>%
+  summarise(last_obs_week = max(time), .groups = "drop")
+
+baseline <- dropout_patterns %>%
+  count(species, climate, name = "N")
+
+risk_data <- dropout_patterns %>%
+  crossing(Week = 5:24) %>% 
+  group_by(species, climate, Week) %>%
+  summarise(n = sum(last_obs_week >= Week), .groups = "drop") %>%
+  left_join(baseline,  by = c("species", "climate")) %>%
+  mutate(prop = n / N,
+    percent = round(100 * prop))
+
+table_14_1 <- risk_data %>%
+  mutate(value = paste0(n, " (", percent, ")")) %>%
+  select(Week, species, value) %>%
+  pivot_wider(names_from = species, values_from = value)
+
+risk_data %>%
+  group_by(species, Week) %>%
+  summarise(n = sum(n),
+            N = sum(N),
+            percent = round(100 * n / N),
+            .groups = "drop") %>%
+  mutate(value = paste0(n, " (", percent, ")")) %>%
+  select(Week, species, value) %>%
+  pivot_wider(names_from = species, values_from = value)
+
+ggplot(risk_data, aes(x = Week, y = prop, color = species)) +
+  geom_step(size = 1) +
+  facet_wrap(~ climate) +
+  labs(x = "Weeks in study", y = "Proportion still in study") +
+  theme_bw()
+```
+
+```{r}
+library(survival)
+surv_obj <- Surv(
+  time = dropout_patterns$last_obs_week,
+  event = dropout_patterns$last_obs_week < 24)
+fit <- survfit(surv_obj ~ species, data = dropout_patterns)
+
+plot(fit, col = 1:2, lty = 1:2,
+     xlim = c(5,25), ylim = c(0.85, 1.0),
+     xlab = "week", ylab = "proportion still in study")
+legend("topright", legend = unique(dropout_patterns$species),
+       col = 1:2, lty = 1:2)
+```
+
+
+```{r}
+hist(time.data2$quality)
+ggplot(time.data2) +
+  geom_histogram(aes(quality),bins = 30, fill = "skyblue", colour = "black")+
+  geom_vline(aes(xintercept = mean(time.data2$quality, na.rm=TRUE)), color = "red", 
+             linetype = "dashed", size = 1) +
+  geom_vline(aes(xintercept = median(time.data2$quality, na.rm=TRUE)), color = "blue", 
+             linetype = "dotted", size = 1) +
+  labs(y="frequency") +
+  scale_x_continuous(breaks = sort(c(pretty(time.data2$quality))))+
+  theme_bw()
+
+ggplot(time.data2, aes(x = time, y = quality, color = species, fill = species)) +
+  stat_summary(fun = mean, geom = "line", size = 1) +
+  stat_summary(fun = mean, geom = "point", size = 3) +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.3) +
+  labs(y="average size of pears") +
+  theme_bw()
+
+ggplot(time.data2, aes(time,quality,colour = species))+
+  stat_summary(fun = mean, geom = "line", size = 1.2) +
+  stat_summary(fun = mean, geom = "point", size = 2) +
+  stat_summary(fun.data = mean_se, geom = "ribbon", aes(fill = species), 
+               alpha = 0.2, colour = NA) +
+  theme_bw()
+```
+
+```{r}
+my_cols <- c("salmon", "steelblue", "darkgrey", "darkgreen")
+my_colors<-viridis(20)
+my_lty <-c(5:24)
+my_pch <-c(5:24)
+```
+
+```{r}
+xyplot(quality ~ time | species,
+       groups = pear_id,
+       type = "l",
+       col = my_colors,
+       lty = my_lty,
+        xlim = c(5, 24),
+       data = time.data2)
+
+xyplot(quality ~ time | climate,
+       groups = pear_id,
+       type = "l",
+       xlim = c(5, 24),
+       ylab = "size of pears",
+       data = time.data2)
+
+xyplot(quality ~ time | as.factor(ecotr_id),
+       groups = pear_id,
+       type = "l",
+       col = my_colors,
+       lty = my_lty,
+        xlim = c(5, 24),
+       data = time.data2)
+
+xyplot(quality ~ time | as.factor(tree_id),
+       groups = pear_id,
+       type = "l",
+       xlim = c(5, 24),
+       ylab = "size of pears",
+       data = time.data2)
+```
+
+```{r}
+table(time.data2$ecotr_id,time.data2$tree_id)
+```
+
+```{r}
+bwplot(quality ~ as.factor(time) | climate, 
+       data = time.data2,
+       xlab = "week",
+       ylab = "quality",
+       )
+
+time.data2 %>% 
+  group_by(time, ecotr_id, climate) %>% 
+  summarise(mean_quality = mean(quality, na.rm = TRUE),
+            sd_quality = sd(quality, na.rm = TRUE),  
+            n_obs = n(),
+            se_quality = sd_quality / sqrt(n_obs),
+            .groups = "drop") %>% 
+  ggplot(aes(x = time, y = mean_quality, colour = climate)) +
+  geom_errorbar(aes(ymin = mean_quality - se_quality, 
+                    ymax = mean_quality + se_quality))+
+  geom_line() +
+  geom_point()+
+  theme_bw() +
+  labs(x = "week",
+       y = "average size of pears",
+       colour = "climate")
+
+ggplot(time.data2,aes(x = time, y = quality, colour = climate, group = pear_id)) +
+  geom_line() +
+  theme_bw() +
+  labs(x = "week",
+       y = "size of pears",
+       colour = "climate")
+```
+
+
+
+
+```{r}
+soil.data <- read.csv("D:/UHasselt/2nd semester/PMHD/project/G12.soil.data.csv",
+                      sep = ",")
+str(soil.data)
+```
+
+```{r}
+time.data3 <- na.omit(time.data)
+sapply(time.data3, function(x) sum(is.na(x)))
+```
+
+```{r}
+time.data.long <- reshape(time.data3, direction = "long", 
+                     varying = c("week_5","week_6","week_7","week_8","week_9",
+                                 "week_10","week_11","week_12","week_13","week_14",
+                                 "week_15","week_16","week_17","week_18","week_19",
+                                 "week_20","week_21","week_22","week_23","week_24"),
+                     idvar = c("pear_id","tree_id","ecotr_id","species","climate"),
+                     timevar = "time", times = 5:24, v.names = "quality")
+str(time.data.long)
+
+# write.csv(time.data.long,"D:/UHasselt/2nd semester/PMHD/project/time_data_clean.csv",
+#           row.names = FALSE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
