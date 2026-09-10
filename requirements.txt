@@ -1,0 +1,6 @@
+# Used only for the independent data audit and README figures.
+numpy
+pandas
+matplotlib
+scipy
+scikit-learn

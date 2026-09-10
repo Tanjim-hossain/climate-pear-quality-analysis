@@ -1,0 +1,11 @@
+.Rhistory
+.RData
+.Rproj.user/
+__pycache__/
+.ipynb_checkpoints/
+*.log
+*.sas7bdat
+*.lck
+results/*-r.pdf
+reports/*_files/
+.DS_Store
